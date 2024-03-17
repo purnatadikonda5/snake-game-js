@@ -37,13 +37,19 @@ function isCollide(snake) {
         return true;
     }
 }
+let score=0,higsc=0;
 function gameEngine() {
     //part1: updating the snake array and food
     if (isCollide(snakeArr)) {
         gameOverSound.play();
         musicSound.pause();
+
         inputDir = { x: 0, y: 0 };
         alert("Game over. Press any key to play again");
+        let hs=document.querySelector("#maxScoreCont");
+        higsc= Math.max(higsc,score);
+        score=0;
+        hs.innerHTML=`<p>Max Score: ${higsc}<\p>`;
         snakeArr = [{ x: 13, y: 15 }];
         // musicSound.play();
     }
@@ -52,7 +58,9 @@ function gameEngine() {
     if (snakeArr[0].y === food.y && snakeArr[0].x === food.x) {
         // console.log("food")
         foodSound.play();
-
+        let sc=document.querySelector("#score");
+        score++;
+        sc.innerHTML=`<p>Score: ${score}<\p>`;
         snakeArr.unshift({ x: snakeArr[0].x + inputDir.x, y: snakeArr[0].y + inputDir.y });
         // console.log(snakeArr)
         let a = 2;
