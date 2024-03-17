@@ -47,6 +47,12 @@ function isCollide(snake) {
         return true;
     }
 }
+function isCl(snake,arr){
+    let len= snake.length;
+    console.log(len);
+    if(arr[snake[len-1].x][snake[len-1].y]>1)return true;
+    
+}
 function gameEngine() {
     //part1: updating the snake array and food
     if (isCollide(snakeArr)) {
@@ -57,14 +63,16 @@ function gameEngine() {
         snakeArr = [{ x: 13, y: 15 }];
         // musicSound.play();
     }
+
+
     let arr=[];
-for(let i=1;i<=18;i++)
-{
-    arr[i]=[];
-    for(let j=1;j<=18;j++){
-        arr[i][j]=0;
+    for(let i=1;i<=18;i++)
+    {
+        arr[i]=[];
+        for(let j=1;j<=18;j++){
+            arr[i][j]=0;
+        }
     }
-}
 
     
 
@@ -85,7 +93,7 @@ for(let i=1;i<=18;i++)
     //display the snake
     board.innerHTML = "";
     snakeArr.forEach((e, index) => {
-        arr[e.x][e.y]=1;
+        arr[e.x][e.y]++;
         snakeElement = document.createElement('div');
         snakeElement.style.gridRowStart = e.y;
         snakeElement.style.gridColumnStart = e.x;
@@ -134,6 +142,14 @@ for(let i=1;i<=18;i++)
             board.appendChild(snakeElement)
         }
     })
+    if (isCl(snakeArr,arr)) {
+        gameOverSound.play();
+        musicSound.pause();
+        inputDir = { x: 0, y: 0 };
+        alert("Game over. Press any key to play again");
+        snakeArr = [{ x: 13, y: 15 }];
+        // musicSound.play();
+    }
     //IF you have eaten the food, increment the score and regenerate the food
     if (snakeArr[0].y === food.y && snakeArr[0].x === food.x) {
         // console.log("food")
