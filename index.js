@@ -14,6 +14,7 @@ let lastPaintTime = 0;
 let snakeArr = [
     { x: 13, y: 15 }
 ]
+
 let food = {
     x: 6, y: 7
 };
@@ -29,6 +30,15 @@ function main(ctime) {
     gameEngine();
     // console.log(ctime);
 }
+function check(arr){
+    let a = 2;
+        let b = 16;
+        food = { x:  Math.round(a + (b - a) * Math.random()), y: Math.round(a + (b - a) * Math.random()) }
+        if(arr[food.x][food.y]==1){
+            check(arr);
+        }
+        else return ;
+}
 function isCollide(snake) {
     // return false;
     //if you into yourself
@@ -37,28 +47,29 @@ function isCollide(snake) {
         return true;
     }
 }
+
 function gameEngine() {
     //part1: updating the snake array and food
     if (isCollide(snakeArr)) {
         gameOverSound.play();
         musicSound.pause();
-        inputDir = { x: 0, y: 0 };
+        inputDir = { x: 0, y: 0 }; 
         alert("Game over. Press any key to play again");
         snakeArr = [{ x: 13, y: 15 }];
         // musicSound.play();
     }
 
-    //IF you have eaten the food, increment the score and regenerate the food
-    if (snakeArr[0].y === food.y && snakeArr[0].x === food.x) {
-        // console.log("food")
-        foodSound.play();
 
-        snakeArr.unshift({ x: snakeArr[0].x + inputDir.x, y: snakeArr[0].y + inputDir.y });
-        // console.log(snakeArr)
-        let a = 2;
-        let b = 16;
-        food = { x: 2 + Math.round(a + (b - a) * Math.random()), y: Math.round(a + (b - a) * Math.random()) }
+    let arr=[];
+    for(let i=1;i<=18;i++)
+    {
+        arr[i]=[];
+        for(let j=1;j<=18;j++){
+            arr[i][j]=0;
+        }
     }
+
+    
 
     //Moving the snake
     // console.log("-----")
@@ -77,6 +88,15 @@ function gameEngine() {
     //display the snake
     board.innerHTML = "";
     snakeArr.forEach((e, index) => {
+       ++arr[e.x][e.y];
+       if(arr[e.x][e.y]>1){
+        gameOverSound.play();
+        musicSound.pause();
+        inputDir = { x: 0, y: 0 };
+        alert("Game over. Press any key to play again");
+        snakeArr = [{ x: 13, y: 15 }];
+       }
+        
         snakeElement = document.createElement('div');
         snakeElement.style.gridRowStart = e.y;
         snakeElement.style.gridColumnStart = e.x;
@@ -125,6 +145,16 @@ function gameEngine() {
             board.appendChild(snakeElement)
         }
     })
+    
+    //IF you have eaten the food, increment the score and regenerate the food
+    if (snakeArr[0].y === food.y && snakeArr[0].x === food.x) {
+        // console.log("food")
+        foodSound.play();
+
+        snakeArr.unshift({ x: snakeArr[0].x + inputDir.x, y: snakeArr[0].y + inputDir.y });
+        // console.log(snakeArr)
+        check(arr);
+    }
 
     //part2: display the snake
 
@@ -174,4 +204,3 @@ window.addEventListener('keydown', e => {
             break;
     }
 });
-
